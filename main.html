@@ -57,7 +57,10 @@ result.innerHTML = null
         R_date.textContent = `Release Date:- ${movie.Released}`
         let imdb = document.createElement("h2")
         imdb.textContent = `IMDB RATEING:- ${movie.imdbRating}`
-        result.append(img,title,R_date,imdb)
+        let actors = document.createElement("p")
+        actors.style.width="290px"
+        actors.textContent = `Actors:- ${movie.Actors}`
+        result.append(img,title,R_date,imdb,actors)
     }
 
     function showerror(){

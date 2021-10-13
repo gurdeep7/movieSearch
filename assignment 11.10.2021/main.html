@@ -76,16 +76,16 @@ let moviename = document.getElementById("moviename").value
 let result = document.getElementById("result")
 result.style.display = "flex"
 result.innerHTML = null
-    fetch(`https://www.omdbapi.com/?apikey=1aed131&s=the god father`)
+    fetch(`https://api.themoviedb.org/3/movie/550?api_key=82474a4254254648630fcc97832b5cec&query=house`)
     .then(function(res){
         return res.json();
     })
     .then(function(res){
         console.log(res)
-        console.log(res.Response)
+        //console.log(res.Response)
         if(res.Response == "True"){
             console.log(res)
-        showresults(res.Search)
+        //showresults(res.Search)
         }else{
             showerror()
         }

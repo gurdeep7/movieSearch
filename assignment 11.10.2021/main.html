@@ -14,15 +14,23 @@
     #search{
         float: right;
     }
+    #results{
+        width: 500px;
+        min-height: 100px;
+        max-height: 500px;
+        background-color: white;
+        overflow: auto;
+    }
     #result{
-       width: fit-content; 
+        width: fit-content;
        background-color: blueviolet;
-       display: block;
+       display: flex;
        position: relative;
        margin: auto;
        border: outset green;
        border-width: 10px;
        display: none;
+       box-sizing: border-box;
     }
     #recommend{
       position: absolute; 
@@ -31,10 +39,31 @@
       font-size: 16px;
       font-weight: bold;
     }
+    #results>div{
+        background-color: cornsilk;
+    }
+    #results>div>img{
+        width: 50px;
+        height:50px;
+    }
+    #results > div> * {
+        display: inline-block;
+    }
+    #result > img, #result > div{
+        display: inline-block;
+        vertical-align: top;
+        height: 440px;
+    }
+    #result > div{
+        display: inline-block;
+        vertical-align: top;
+        height: 440px;
+    }
 </style>
 <body>
 Home Hotstar Disney Movies
-<div id="search"><input type="text" id="moviename" placeholder="Search Movie"><button onclick="search()">Search</button></div>
+<div id="search"><input type="text" oninput="search()" id="moviename" placeholder="Search Movie" style="width: 500px;"><div id= "results"></div></div>
+
 <div id="result"></div>
 
 </body>
@@ -42,11 +71,12 @@ Home Hotstar Disney Movies
 <script>
 
 function search(){
+let results = document.getElementById("results")
 let moviename = document.getElementById("moviename").value
 let result = document.getElementById("result")
-result.style.display = "block"
+result.style.display = "flex"
 result.innerHTML = null
-    fetch(`https://www.omdbapi.com/?apikey=1aed131&t=${moviename}`)
+    fetch(`https://www.omdbapi.com/?apikey=1aed131&s=the god father`)
     .then(function(res){
         return res.json();
     })
@@ -54,7 +84,8 @@ result.innerHTML = null
         console.log(res)
         console.log(res.Response)
         if(res.Response == "True"){
-        showmovie(res)
+            console.log(res)
+        showresults(res.Search)
         }else{
             showerror()
         }
@@ -63,21 +94,32 @@ result.innerHTML = null
         console.log(err)
     })
 
-    function showmovie(movie){
+    
+
+    function showerror(){
+        let img = document.createElement("img")
+        img.src = "https://cdn.dribbble.com/users/2382015/screenshots/6065978/media/1273880a5b9cc8008301089835f37939.gif";
+        result.append(img);
+    }
+   
+}
+function showmovie(movie){
         let img = document.createElement("img")
         img.src = movie.Poster
         img.style.width = "300px"
         img.style.height = "450px"
+        let div = document.createElement("div")
         let title = document.createElement("h1")
         title.textContent = movie.Title
         let R_date = document.createElement("p")
-        R_date.textContent = `Release Date:- ${movie.Released}`
+        R_date.textContent = `Release Year:- ${movie.Year}`
         let imdb = document.createElement("h2")
         imdb.textContent = `IMDB RATING:- ${movie.imdbRating}`
         let actors = document.createElement("p")
         actors.style.width="290px"
         actors.textContent = `Actors:- ${movie.Actors}`
-        result.append(img,title,R_date,imdb,actors)
+        div.append(title,R_date,imdb,actors)
+        result.append(img,div)
 
         if(movie.imdbRating > 8.5){
             let recommend = document.createElement("div")
@@ -87,13 +129,20 @@ result.innerHTML = null
             result.append(recommend)
         }
     }
-
-    function showerror(){
+function showresults(movie){
+    results.innerHTML = null
+    movie.forEach(function(data){
+        let div = document.createElement("div")
         let img = document.createElement("img")
-        img.src = "https://cdn.dribbble.com/users/2382015/screenshots/6065978/media/1273880a5b9cc8008301089835f37939.gif";
-        result.append(img);
-    }
-   
+        img.src = data.Poster;
+        let title = document.createElement("p")
+        title.textContent = data.Title
+        div.onclick = function(){ 
+            showmovie(data)
+        }
+        div.append(img,title);
+        results.append(div)
+    })
 }
 
 </script>

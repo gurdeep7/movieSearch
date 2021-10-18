@@ -71,6 +71,7 @@
 <body>
 Home Hotstar Disney Movies
 <div id="search"><input type="text" oninput="debounce(search,1000)" id="moviename" placeholder="Search Movie" style="width: 500px;"><div id= "results"></div></div>
+<div id = "user" style="float: right;"><br/>Login</div>
 <div id="result"></div>
 <h1 style="text-align: center;">Popular movies</h1>
 <div id = "grid"></div>
@@ -190,7 +191,7 @@ function debounce(func,delay){
  if(timerId){
    clearTimeout(timerId)
  }
-timerId= setTimeout(function(){
+timerId= setTimeout(()=>{
     func();
   },delay)
 }
